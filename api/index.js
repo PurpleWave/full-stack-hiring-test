@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require("express");
+const db = require("./database.js");
 
 const PORT = process.env.PORT || 3001;
 
@@ -28,6 +29,16 @@ const EQUIPMENT_TYPES = [
 
 app.get("/api/equipment_types", (req, res) => {
     res.json(EQUIPMENT_TYPES);
+});
+
+app.get("/api/departments", (req, res) => {
+    db.all("SELECT * from departments", [], function(err, rows) {
+        if (err) {
+            res.status(400).json({"error": err.message})
+        } else {
+            res.json(rows)
+        }
+    })
 });
 
 // This needs to be the last route defined so that it does not
